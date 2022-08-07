@@ -59,7 +59,7 @@ html,
 body {
 	width: 100%;
 	height: 100%;
-	background-color: #FFFFFF;
+	background-color: #F2F2F2;
 	font-family: 'Lexend Deca', sans-serif;
 }
 
