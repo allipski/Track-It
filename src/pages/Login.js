@@ -5,12 +5,15 @@ import axios from "axios";
 import { useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
+import PersonContext from "../contexts/PersonContext";
+import { useContext } from "react";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [data, setData] = useState("");
   const navigate = useNavigate();
+  const { setPerson } = useContext(PersonContext);
 
   function postLogin(event) {
     event.preventDefault();
@@ -23,7 +26,7 @@ export default function Login() {
           password: password,
         }
       )
-      .then((answer) => {setData(answer); navigate("/hoje")})
+      .then((answer) => {setData(answer); navigate("/hoje"); setPerson(answer.data)})
       .catch((err) => {console.log(err); setData(""); alert("Email ou senha incorretos, revise seus dados e tente novamente"); setEmail(""); setPassword(""); setData("")});
   }
 

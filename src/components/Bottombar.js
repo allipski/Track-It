@@ -1,14 +1,16 @@
 import styled from "styled-components";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { Link } from "react-router-dom";
 
 export default function Bottombar() {
+
   const percentage = 80;
   return (
     <Wrapper>
-      <h4>Hábitos</h4>
+      <Link to="/habitos"><h4>Hábitos</h4></Link>
       <div>
-        <CircularProgressbar
+      <Link to="/hoje"><CircularProgressbar
           value={percentage}
           text="Hoje"
           background
@@ -19,9 +21,9 @@ export default function Bottombar() {
             pathColor: "#ffffff",
             trailColor: "transparent",
           })}
-        />
+        /></Link>
       </div>
-      <h4>Histórico</h4>
+      <Link to="/historico"><h4>Histórico</h4></Link>
     </Wrapper>
   );
 }
@@ -37,6 +39,10 @@ const Wrapper = styled.div`
   width: 100%;
   height: 70px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
+  
+  a {
+    text-decoration: none;
+  }
 
   img {
     height: 50px;
