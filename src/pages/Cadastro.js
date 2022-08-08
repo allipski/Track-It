@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
+import { useNavigate } from "react-router-dom";
 
 export default function Cadastro() {
   const [email, setEmail] = useState("");
@@ -17,6 +18,7 @@ export default function Cadastro() {
   const [image, setImage] = useState("");
   const [password, setPassword] = useState("");
   const [data, setData] = useState("");
+  const navigate = useNavigate();
 
 
   function postCadastro(event) {
@@ -32,8 +34,8 @@ export default function Cadastro() {
           password: password,
         }
       )
-      .then((answer) => {setData(answer); console.log(answer);})
-      .catch((err) => {console.log(err); setData("")});
+      .then((answer) => {setData(answer); navigate("/");})
+      .catch((err) => {console.log(err); alert("Não foi possível fazer o seu cadastro. Tem certeza que você não possui uma conta?"); setEmail(""); setPassword(""); setData(""); setImage(""); setName("")});
   }
 
   function Carregamento() {

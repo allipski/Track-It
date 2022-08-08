@@ -23,7 +23,7 @@ export default function Login() {
           password: password,
         }
       )
-      .then((answer) => {setData(answer); console.log(answer); navigate("/hoje")})
+      .then((answer) => {setData(answer); navigate("/hoje")})
       .catch((err) => {console.log(err); setData(""); alert("Email ou senha incorretos, revise seus dados e tente novamente"); setEmail(""); setPassword(""); setData("")});
   }
 
