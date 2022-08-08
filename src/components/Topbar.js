@@ -25,6 +25,7 @@ box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
 img {
     height: 50px;
     width: 50px;
+    border-radius: 50%;
 }
 
 h3 {

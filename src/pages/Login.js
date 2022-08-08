@@ -1,17 +1,69 @@
 import styled from "styled-components";
 import logo from "../images/logo.png";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { useState } from "react";
+import { ThreeDots } from "react-loader-spinner";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [data, setData] = useState("");
+
+  function postLogin(event) {
+    event.preventDefault();
+    setData(null);
+    axios
+      .post(
+        "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login",
+        {
+          email: email,
+          password: password,
+        }
+      )
+      .then((answer) => {setData(answer); console.log(answer);})
+      .catch((err) => {console.log(err); setData("")});
+  }
+
+  function Carregamento() {
+    if (data === null) {
+      return (
+        <ThreeDots
+          height="70"
+          width="70"
+          radius="9"
+          color="#FFFFFF"
+          ariaLabel="three-dots-loading"
+          wrapperStyle
+          wrapperClass
+        />
+      );
+    } else {
+      return ("Entrar");
+    }
+  }
+
   return (
     <Wrapper>
       <img src={logo} />
-      <FormStyle>
-        <InputStyle type="email" placeholder="email"></InputStyle>
-        <InputStyle type="password" placeholder="senha"></InputStyle>
-        <ButtonStyle type="submit">Entrar</ButtonStyle>
+      <FormStyle onSubmit={postLogin}>
+        <InputStyle carregando={data}
+          type="email"
+          placeholder="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        ></InputStyle>
+        <InputStyle carregando={data}
+          type="password"
+          placeholder="senha"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        ></InputStyle>
+        <ButtonStyle carregando={data} type="submit"><Carregamento /></ButtonStyle>
       </FormStyle>
-      <LinkStyle><Link to='/cadastro'>Não tem uma conta? Cadastre-se!</Link></LinkStyle>
+      <LinkStyle>
+        <Link to="/cadastro">Não tem uma conta? Cadastre-se!</Link>
+      </LinkStyle>
     </Wrapper>
   );
 }
@@ -49,6 +101,7 @@ const InputStyle = styled.input`
   font-family: "Lexend Deca", sans-serif;
   font-size: 20px;
   font-weight: 400;
+  background-color: ${props => props.carregando === null ? '#F2F2F2' : '#FFFFFF'};
   color: #d4d4d4;
 `;
 
@@ -61,6 +114,7 @@ const ButtonStyle = styled.button`
   font-weight: 400;
   color: #ffffff;
   background-color: #52b6ff;
+  opacity: ${props => props.carregando === null ? 0.7 : 1};
   border: none;
   border-radius: 5px;
   width: 100%;
