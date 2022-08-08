@@ -4,11 +4,13 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [data, setData] = useState("");
+  const navigate = useNavigate();
 
   function postLogin(event) {
     event.preventDefault();
@@ -21,8 +23,8 @@ export default function Login() {
           password: password,
         }
       )
-      .then((answer) => {setData(answer); console.log(answer);})
-      .catch((err) => {console.log(err); setData("")});
+      .then((answer) => {setData(answer); console.log(answer); navigate("/hoje")})
+      .catch((err) => {console.log(err); setData(""); alert("Email ou senha incorretos, revise seus dados e tente novamente"); setEmail(""); setPassword(""); setData("")});
   }
 
   function Carregamento() {
