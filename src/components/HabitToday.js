@@ -1,14 +1,26 @@
+import { useState } from "react";
 import styled from "styled-components";
 
-export default function HabitToday() {
+export default function HabitToday({
+  name,
+  done,
+  currentSequence,
+  highestSequence,
+}) {
+  const [feito, setFeito] = useState(false);
+
   return (
     <Wrapper>
-      <Textinho>
-        <h3>Ler 1 capítulo de livro</h3>
-        <h4>Sequência atual: 3 dias</h4>
-        <h4>Seu recorde: 5 dias</h4>
+      <Textinho feito={feito} atual={currentSequence} record={highestSequence}>
+        <h3>{name}</h3>
+        <h4>
+          Sequência atual: <span>{currentSequence} dias</span>
+        </h4>
+        <h4>
+          Seu recorde: <span>{highestSequence} dias</span>
+        </h4>
       </Textinho>
-      <DoneButton>
+      <DoneButton onClick={() => setFeito(!feito)} feito={feito}>
         <ion-icon name="checkmark"></ion-icon>
       </DoneButton>
     </Wrapper>
@@ -24,6 +36,7 @@ const Wrapper = styled.div`
   width: 100%;
   height: fit-content;
   padding: 20px;
+  margin: 7px 0;
 `;
 
 const Textinho = styled.div`
@@ -34,8 +47,6 @@ const Textinho = styled.div`
   color: #666666;
   font-weight: 400;
   font-family: "Lexend Deca";
-
-
 
   h3 {
     font-size: 20px;
@@ -48,6 +59,17 @@ const Textinho = styled.div`
     line-height: 16px;
     margin: 0;
   }
+
+  span {
+    font-size: 13px;
+    line-height: 16px;
+    margin: 0;
+    color: ${(props) => (props.feito ? "#8FC549" : "#666666")};
+  }
+
+  span:nth-of-type(2) {
+    color: ${(props) => (props.feito && (props.atual == props.record) ? "#8FC549" : "#666666")};
+  }
 `;
 
 const DoneButton = styled.button`
@@ -57,10 +79,10 @@ const DoneButton = styled.button`
   width: 70px;
   height: 70px;
   font-size: 50px;
-  border: 1px solid #E7E7E7;
+  border: 1px solid #e7e7e7;
   border-radius: 5px;
-  background-color: #EBEBEB;
-  color: #FFFFFF;
+  background-color: ${(props) => (props.feito ? "#8FC549" : "#EBEBEB")};
+  color: #ffffff;
 
   ion-icon {
     --ionicon-stroke-width: 60px;

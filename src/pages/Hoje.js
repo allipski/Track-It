@@ -4,18 +4,45 @@ import Bottombar from "../components/Bottombar";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import HabitToday from "../components/HabitToday";
+import axios from "axios";
+import PersonContext from "../contexts/PersonContext";
+import { useContext, useEffect, useState } from "react";
 
 export default function Hoje() {
-  require("dayjs/locale/pt-br");
+  const { person } = useContext(PersonContext);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${person.token}`,
+    },
+  };
+  const [list, setList] = useState([]);
+  useEffect(() => {
+    const promise = axios.get(
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today`,
+      config
+    );
 
+    promise.then((answer) => setList(answer.data));
+  }, []);
+  console.log(list)
   return (
     <>
       <Topbar />
       <Wrapper>
         <Cabecalho>
-          <h3>{dayjs().locale("pt-br").format("dddd")}, {dayjs().locale("pt-br").format("DD")}/{dayjs().locale("pt-br").format("MM")} </h3>
+          <h3>
+            {dayjs().locale("pt-br").format("dddd")},{" "}
+            {dayjs().locale("pt-br").format("DD/MM")}
+          </h3>
         </Cabecalho>
-        <HabitToday />
+        {list.map((item, index) => (
+          <HabitToday key={index}
+            name={item.name}
+            done={item.done}
+            currentSequence={item.currentSequence}
+            highestSequence={item.highestSequence}
+          />
+        ))}
       </Wrapper>
       <Bottombar />
     </>

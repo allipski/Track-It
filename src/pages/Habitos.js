@@ -2,9 +2,30 @@ import Topbar from "../components/Topbar";
 import styled from "styled-components";
 import { ButtonStyle } from "./Login";
 import NewHabit from "../components/NewHabit";
+import SavedHabit from "../components/SavedHabit";
 import Bottombar from "../components/Bottombar";
+import axios from "axios";
+import PersonContext from "../contexts/PersonContext";
+import { useContext, useEffect, useState } from "react";
 
 export default function Habitos() {
+  const { person } = useContext(PersonContext);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${person.token}`,
+    },
+  };
+  const [list, setList] = useState([]);
+
+  useEffect(() => {
+    const promise = axios.get(
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits`,
+      config
+    );
+
+    promise.then((answer) => setList(answer.data));
+  }, []);
+
   return (
     <>
       <Topbar />
@@ -15,11 +36,14 @@ export default function Habitos() {
             <ion-icon name="add-outline"></ion-icon>
           </AddButton>
         </Cabecalho>
-        <NewHabit />
+        {list.map((item, index) => (
+          <SavedHabit key={index} name={item.name} days={item.days} />
+        ))}
+        {/* <NewHabit />
         <h4>
           Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para
           começar a trackear!
-        </h4>
+        </h4> */}
       </Wrapper>
       <Bottombar />
     </>

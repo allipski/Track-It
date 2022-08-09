@@ -1,26 +1,67 @@
+import { useState} from "react";
 import styled from "styled-components";
 import { InputStyle, ButtonStyle } from "../pages/Login";
+import axios from "axios";
+import PersonContext from "../contexts/PersonContext";
+import { useContext } from "react";
+import Dia from "./Dia";
 
-export default function NewHabit() {
+export default function NewHabit(novo) {
+  const { person } = useContext(PersonContext);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${person.token}`,
+    },
+  };
   const weekday = ["D", "S", "T", "Q", "Q", "S", "S"];
+  const [dias, setDias] = useState([]);
+  const [habito, setHabito] = useState("");
 
-  return (
-    <Wrapper>
-      <Input type="text" placeholder="nome do hábito"></Input>
-      <Semana>
-        {weekday.map((day, index) => (
-          <Dia key={index}>{day}</Dia>
-        ))}
-      </Semana>
-      <Botoes>
-        <p>Cancelar</p>
-        <SaveButton>Salvar</SaveButton>
-      </Botoes>
-    </Wrapper>
-  );
+  function saveNewHabit(event) {
+    event.preventDefault();
+    axios
+      .post(
+        "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
+        {
+          name: habito,
+          days: dias,
+        },
+        config
+      )
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err));
+  }
+  if (novo) {
+    return (
+      <Wrapper onSubmit={saveNewHabit}>
+        <Input
+          type="text"
+          placeholder="nome do hábito"
+          onChange={(e) => {
+            setHabito(e.target.value);
+          }}
+        ></Input>
+        <Semana>
+          {weekday.map((day, index) => (
+            <Dia
+              day={day}
+              id={index}
+              dias={dias}
+              setDias={setDias}
+              key={index}
+            />
+          ))}
+        </Semana>
+        <Botoes>
+          <p>Cancelar</p>
+          <SaveButton type="submit">Salvar</SaveButton>
+        </Botoes>
+      </Wrapper>
+    );
+  }
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.form`
   display: flex;
   flex-direction: column;
   background-color: #ffffff;
@@ -49,20 +90,6 @@ const Semana = styled.div`
   align-items: center;
   justify-content: flex-start;
   gap: 4px;
-`;
-
-const Dia = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border: 1px solid #d4d4d4;
-  color: #dbdbdb;
-  border-radius: 5px;
-  font-size: 20px;
-  font-family: "Lexend Deca", sans-serif;
-  font-weight: 400;
 `;
 
 const Botoes = styled.div`

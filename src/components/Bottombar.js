@@ -5,25 +5,32 @@ import { Link } from "react-router-dom";
 
 export default function Bottombar() {
 
-  const percentage = 80;
+  const percentage = 40;
+
   return (
     <Wrapper>
-      <Link to="/habitos"><h4>Hábitos</h4></Link>
+      <Link to="/habitos">
+        <h4>Hábitos</h4>
+      </Link>
       <div>
-      <Link to="/hoje"><CircularProgressbar
-          value={percentage}
-          text="Hoje"
-          background
-          backgroundPadding={6}
-          styles={buildStyles({
-            backgroundColor: "#52B6FF",
-            textColor: "#ffffff",
-            pathColor: "#ffffff",
-            trailColor: "transparent",
-          })}
-        /></Link>
+        <Link to="/hoje">
+          <CircularProgressbar
+            value={percentage}
+            text="Hoje"
+            background
+            backgroundPadding={6}
+            styles={buildStyles({
+              backgroundColor: "#52B6FF",
+              textColor: "#ffffff",
+              pathColor: "#ffffff",
+              trailColor: "transparent",
+            })}
+          />
+        </Link>
       </div>
-      <Link to="/historico"><h4>Histórico</h4></Link>
+      <Link to="/historico">
+        <h4>Histórico</h4>
+      </Link>
     </Wrapper>
   );
 }
@@ -39,7 +46,7 @@ const Wrapper = styled.div`
   width: 100%;
   height: 70px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
-  
+
   a {
     text-decoration: none;
   }
@@ -51,7 +58,7 @@ const Wrapper = styled.div`
 
   h4 {
     font-weight: 400;
-    color: #52B6FF;
+    color: #52b6ff;
   }
 
   div {

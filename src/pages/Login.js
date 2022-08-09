@@ -26,8 +26,19 @@ export default function Login() {
           password: password,
         }
       )
-      .then((answer) => {setData(answer); navigate("/hoje"); setPerson(answer.data)})
-      .catch((err) => {console.log(err); setData(""); alert("Email ou senha incorretos, revise seus dados e tente novamente"); setEmail(""); setPassword(""); setData("")});
+      .then((answer) => {
+        setData(answer);
+        navigate("/hoje");
+        setPerson(answer.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        setData("");
+        alert("Email ou senha incorretos, revise seus dados e tente novamente");
+        setEmail("");
+        setPassword("");
+        setData("");
+      });
   }
 
   function Carregamento() {
@@ -44,7 +55,7 @@ export default function Login() {
         />
       );
     } else {
-      return ("Entrar");
+      return "Entrar";
     }
   }
 
@@ -52,19 +63,23 @@ export default function Login() {
     <Wrapper>
       <img src={logo} />
       <FormStyle onSubmit={postLogin}>
-        <InputStyle carregando={data}
+        <InputStyle
+          carregando={data}
           type="email"
           placeholder="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         ></InputStyle>
-        <InputStyle carregando={data}
+        <InputStyle
+          carregando={data}
           type="password"
           placeholder="senha"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         ></InputStyle>
-        <ButtonStyle carregando={data} type="submit"><Carregamento /></ButtonStyle>
+        <ButtonStyle carregando={data} type="submit">
+          <Carregamento />
+        </ButtonStyle>
       </FormStyle>
       <LinkStyle>
         <Link to="/cadastro">Não tem uma conta? Cadastre-se!</Link>
@@ -80,6 +95,7 @@ const Wrapper = styled.div`
   padding-top: 68px;
   width: 100%;
   height: 100%;
+  background-color: #ffffff;
 
   img {
     height: 180px;
@@ -106,7 +122,8 @@ const InputStyle = styled.input`
   font-family: "Lexend Deca", sans-serif;
   font-size: 20px;
   font-weight: 400;
-  background-color: ${props => props.carregando === null ? '#F2F2F2' : '#FFFFFF'};
+  background-color: ${(props) =>
+    props.carregando === null ? "#F2F2F2" : "#FFFFFF"};
   color: #d4d4d4;
 `;
 
@@ -119,7 +136,7 @@ const ButtonStyle = styled.button`
   font-weight: 400;
   color: #ffffff;
   background-color: #52b6ff;
-  opacity: ${props => props.carregando === null ? 0.7 : 1};
+  opacity: ${(props) => (props.carregando === null ? 0.7 : 1)};
   border: none;
   border-radius: 5px;
   width: 100%;

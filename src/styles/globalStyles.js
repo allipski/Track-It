@@ -58,7 +58,7 @@ table {
 html,
 body {
 	width: 100%;
-	height: 100%;
+	height: fit-content;
 	background-color: #F2F2F2;
 	font-family: 'Lexend Deca', sans-serif;
 }
