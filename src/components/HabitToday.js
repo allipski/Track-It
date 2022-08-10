@@ -7,7 +7,7 @@ export default function HabitToday({
   currentSequence,
   highestSequence,
 }) {
-  const [feito, setFeito] = useState(false);
+  const [feito, setFeito] = useState(done);
 
   return (
     <Wrapper>

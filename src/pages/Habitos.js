@@ -6,25 +6,60 @@ import SavedHabit from "../components/SavedHabit";
 import Bottombar from "../components/Bottombar";
 import axios from "axios";
 import PersonContext from "../contexts/PersonContext";
+import ProgressContext from "../contexts/ProgressContext";
 import { useContext, useEffect, useState } from "react";
 
 export default function Habitos() {
   const { person } = useContext(PersonContext);
+  const { progress, setProgress } = useContext(ProgressContext);
   const config = {
     headers: {
       Authorization: `Bearer ${person.token}`,
     },
   };
   const [list, setList] = useState([]);
+  const [add, setAdd] = useState(false);
 
-  useEffect(() => {
-    const promise = axios.get(
+  function getHabitos() {
+    axios.get(
       `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits`,
       config
-    );
+    ).then((answer) => setList(answer.data))
+  }
+    useEffect(() => {
+      getHabitos();
+    }, []);
 
-    promise.then((answer) => setList(answer.data));
-  }, []);
+function TemHabito() {
+  if (list.length === 0) {
+    if (add) {
+      return (<><NewHabit getHabitos={getHabitos} setList={setList} setAdd={setAdd} />
+        <h4>
+          Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para
+          começar a trackear!
+        </h4></>)
+    } else {
+      return (<h4>
+          Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para
+          começar a trackear!
+        </h4>)
+    }
+  } else {
+  if (add){
+    return(
+      <><NewHabit getHabitos={getHabitos} setList={setList} setAdd={setAdd} />
+      {list.map((item, index) => (
+          <SavedHabit setList={setList} key={index} id={item.id} name={item.name} days={item.days} />
+        ))}
+      </>
+    )
+  } else {
+    return(list.map((item, index) => (
+      <SavedHabit getHabitos={getHabitos} key={index} id={item.id} name={item.name} days={item.days} />
+    )))
+  }
+}
+}
 
   return (
     <>
@@ -32,18 +67,11 @@ export default function Habitos() {
       <Wrapper>
         <Cabecalho>
           <h3>Meus hábitos</h3>
-          <AddButton>
+          <AddButton onClick={() => setAdd(true)}>
             <ion-icon name="add-outline"></ion-icon>
           </AddButton>
         </Cabecalho>
-        {list.map((item, index) => (
-          <SavedHabit key={index} name={item.name} days={item.days} />
-        ))}
-        {/* <NewHabit />
-        <h4>
-          Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para
-          começar a trackear!
-        </h4> */}
+        <TemHabito />
       </Wrapper>
       <Bottombar />
     </>
@@ -56,6 +84,7 @@ const Wrapper = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
+  min-height: 100vh;
   padding: 72px 20px 72px 20px;
 
   h4 {

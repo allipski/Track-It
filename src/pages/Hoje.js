@@ -16,15 +16,15 @@ export default function Hoje() {
     },
   };
   const [list, setList] = useState([]);
-  useEffect(() => {
-    const promise = axios.get(
+  function getHabitos() {
+    axios.get(
       `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today`,
       config
-    );
-
-    promise.then((answer) => setList(answer.data));
-  }, []);
-  console.log(list)
+    ).then((answer) => {setList(answer.data); console.log(answer.data)})
+  }
+    useEffect(() => {
+      getHabitos();
+    }, []);
   return (
     <>
       <Topbar />
@@ -55,6 +55,7 @@ const Wrapper = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
+  min-height: 100vh;
   padding: 72px 20px 72px 20px;
 `;
 

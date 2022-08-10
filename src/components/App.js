@@ -6,7 +6,7 @@ import Habitos from "../pages/Habitos";
 import Hoje from "../pages/Hoje";
 import Historico from "../pages/Historico";
 import PersonContext from "../contexts/PersonContext";
-import AllhabitsContext from "../contexts/AllhabitsContext";
+import ProgressContext from "../contexts/ProgressContext";
 import { useState } from "react";
 
 export default function App() {
@@ -19,14 +19,14 @@ export default function App() {
     token: "",
   });
 
-  const [allhabits, setAllhabits] = useState([]);
+  const [progress, setProgress] = useState();
 
   return (
     <>
       <GlobalStyle />
       <BrowserRouter>
         <PersonContext.Provider value={{ person, setPerson }}>
-          <AllhabitsContext.Provider value={{ allhabits, setAllhabits }}>
+          <ProgressContext.Provider value={{ progress, setProgress }}>
             <Routes>
               <Route path="/" element={<Login />} />
               <Route path="/cadastro" element={<Cadastro />} />
@@ -34,7 +34,7 @@ export default function App() {
               <Route path="/hoje" element={<Hoje />} />
               <Route path="/historico" element={<Historico />} />
             </Routes>
-          </AllhabitsContext.Provider>
+          </ProgressContext.Provider>
         </PersonContext.Provider>
       </BrowserRouter>
     </>

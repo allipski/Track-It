@@ -1,12 +1,40 @@
 import styled from "styled-components";
-import { InputStyle, ButtonStyle } from "../pages/Login";
 import ModDay from "./ModDay";
+import PersonContext from "../contexts/PersonContext";
+import { useContext, useEffect, useState } from "react";
+import axios from "axios";
 
-export default function SavedHabit({ name, days }) {
+export default function SavedHabit({ getHabitos, setList, id, name, days }) {
+  const { person } = useContext(PersonContext);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${person.token}`,
+    },
+  };
   const weekday = ["D", "S", "T", "Q", "Q", "S", "S"];
+
+  function confirmar() {
+    return window.confirm(
+      "Tem certeza que deseja deletar esse hábito? Essa ação não pode ser desfeita."
+    );
+  }
+
+  function deletar() {
+    if (confirmar) {
+      axios
+        .delete(
+          `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`,
+          config
+        )
+        .then(() => getHabitos());
+    } else {
+      return false;
+    }
+  }
 
   return (
     <Wrapper>
+      <ion-icon name="trash-outline" onClick={() => {confirmar(); deletar()}}></ion-icon>
       <span>{name}</span>
       <Semana>
         {weekday.map((day, index) => (
@@ -17,7 +45,7 @@ export default function SavedHabit({ name, days }) {
   );
 }
 
-const Wrapper = styled.form`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #ffffff;
@@ -28,6 +56,7 @@ const Wrapper = styled.form`
   padding: 20px;
   gap: 8px;
   margin: 7px 0;
+  position: relative;
 
   p {
     font-family: "Lexend Deca";
@@ -42,10 +71,14 @@ const Wrapper = styled.form`
     margin: 0;
     color: #666666;
   }
-`;
 
-const Input = styled(InputStyle)`
-  color: #dbdbdb;
+  ion-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    color: #666666;
+  }
 `;
 
 const Semana = styled.div`
@@ -54,20 +87,4 @@ const Semana = styled.div`
   align-items: center;
   justify-content: flex-start;
   gap: 4px;
-`;
-
-const Botoes = styled.div`
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 15px;
-  margin-top: 30px;
-`;
-
-const SaveButton = styled(ButtonStyle)`
-  width: auto;
-  height: auto;
-  font-size: 16px;
-  padding: 8px 16px;
 `;

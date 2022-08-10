@@ -20,6 +20,7 @@ export default function Hoje() {
 }
 
 const Wrappering = styled(Wrapper)`
+min-height: 100vh;
   h3,
   h4 {
     margin: 0;

@@ -1,12 +1,12 @@
-import { useState} from "react";
 import styled from "styled-components";
 import { InputStyle, ButtonStyle } from "../pages/Login";
 import axios from "axios";
 import PersonContext from "../contexts/PersonContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import { ThreeDots } from "react-loader-spinner";
 import Dia from "./Dia";
 
-export default function NewHabit(novo) {
+export default function NewHabit({ getHabitos, setAdd }) {
   const { person } = useContext(PersonContext);
   const config = {
     headers: {
@@ -16,9 +16,12 @@ export default function NewHabit(novo) {
   const weekday = ["D", "S", "T", "Q", "Q", "S", "S"];
   const [dias, setDias] = useState([]);
   const [habito, setHabito] = useState("");
+  const [data, setData] = useState("");
 
   function saveNewHabit(event) {
+    setData(null);
     event.preventDefault();
+    
     axios
       .post(
         "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
@@ -28,37 +31,50 @@ export default function NewHabit(novo) {
         },
         config
       )
-      .then((data) => console.log(data))
-      .catch((err) => console.log(err));
+      .then((data) => {setData(data); getHabitos(); setAdd(false)}).catch(console.log('deuruim'));
   }
-  if (novo) {
-    return (
-      <Wrapper onSubmit={saveNewHabit}>
-        <Input
-          type="text"
-          placeholder="nome do hábito"
-          onChange={(e) => {
-            setHabito(e.target.value);
-          }}
-        ></Input>
-        <Semana>
-          {weekday.map((day, index) => (
-            <Dia
-              day={day}
-              id={index}
-              dias={dias}
-              setDias={setDias}
-              key={index}
-            />
-          ))}
-        </Semana>
-        <Botoes>
-          <p>Cancelar</p>
-          <SaveButton type="submit">Salvar</SaveButton>
-        </Botoes>
-      </Wrapper>
-    );
+
+  function Carregamento() {
+    if (data === null) {
+      return (
+        <ThreeDots
+          height="20"
+          width="49"
+          radius="9"
+          color="#FFFFFF"
+          ariaLabel="three-dots-loading"
+          wrapperStyle
+          wrapperClass
+        />
+      );
+    } else {
+      return "Salvar";
+    }
   }
+
+  return (
+    <Wrapper onSubmit={(event) => {saveNewHabit(event); setData(null)}}>
+      <Input
+        carregando={data}
+        type="text"
+        placeholder="nome do hábito"
+        onChange={(e) => {
+          setHabito(e.target.value);
+        }}
+      ></Input>
+      <Semana>
+        {weekday.map((day, index) => (
+          <Dia day={day} id={index} dias={dias} setDias={setDias} key={index} />
+        ))}
+      </Semana>
+      <Botoes>
+        <p onClick={() => setAdd(false)}>Cancelar</p>
+        <SaveButton carregando={data} type="submit">
+          <Carregamento />
+        </SaveButton>
+      </Botoes>
+    </Wrapper>
+  );
 }
 
 const Wrapper = styled.form`

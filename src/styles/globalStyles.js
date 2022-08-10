@@ -59,6 +59,7 @@ html,
 body {
 	width: 100%;
 	height: fit-content;
+	min-height: 100vh;
 	background-color: #F2F2F2;
 	font-family: 'Lexend Deca', sans-serif;
 }
@@ -68,6 +69,7 @@ body {
 	flex-direction: column;
 	width: 100%;
 	height: 100%;
+	min-height: 100vh;
 	align-items: center;
 	justify-content: center;
 }
